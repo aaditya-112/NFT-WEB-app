@@ -1,0 +1,110 @@
+import React from "react";
+import { Heart, Clock } from "lucide-react";
+
+const cards = [
+  {
+    id: 1,
+    image: "https://nft-tailwind.preview.uideck.com/src/images/picks/image-01.svg",
+    likes: "4.6K",
+    title: "3d abstract illustration",
+    creator: "@Devid_Miller",
+    creatorImg: "https://nft-tailwind.preview.uideck.com/src/images/picks/creator-01.png",
+    bid: "5.49 ETH",
+  },
+  {
+    id: 2,
+    image: "https://nft-tailwind.preview.uideck.com/src/images/picks/image-01.svg",
+    likes: "1.6K",
+    title: "3d abstract illustration",
+    creator: "@Wilium_de",
+    creatorImg: "https://nft-tailwind.preview.uideck.com/src/images/picks/creator-01.png",
+    bid: "2.85 ETH",
+  },
+  {
+    id: 3,
+    image: "https://nft-tailwind.preview.uideck.com/src/images/picks/image-01.svg",
+    likes: "4.6K",
+    title: "3d abstract illustration",
+    creator: "@Nicolo_Tesla",
+    creatorImg: "https://nft-tailwind.preview.uideck.com/src/images/picks/creator-01.png",
+    bid: "7.82 ETH",
+  },
+  {
+    id: 4,
+    image: "https://nft-tailwind.preview.uideck.com/src/images/picks/image-01.svg",
+    likes: "4.6K",
+    title: "3d abstract illustration",
+    creator: "@Liza_Aurora",
+    creatorImg: "https://nft-tailwind.preview.uideck.com/src/images/picks/creator-01.png",
+    bid: "0.25 ETH",
+  },
+];
+
+const TodaysPicks = () => {
+  return (
+    <section className="bg-[#0F0F25] py-12 px-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl md:text-3xl font-semibold text-white">Today's Picks</h2>
+          <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-md font-medium">
+            View All
+          </button>
+        </div>
+
+        {/* Cards */}
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+          {cards.map((card) => (
+            <div
+              key={card.id}
+              className="bg-[#1E1E35] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition"
+            >
+              {/* Image with likes */}
+              <div className="relative">
+                <img src={card.image} alt={card.title} className="w-full object-cover rounded-t-xl" />
+                <div className="absolute top-3 right-3 bg-white/90 text-black px-3 py-1 text-sm rounded-full flex items-center gap-1">
+                  <Heart size={16} className="text-red-500" fill="currentColor" />
+                  {card.likes}
+                </div>
+              </div>
+
+              {/* Info */}
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-white">{card.title}</h3>
+
+                <div className="flex items-center justify-between mt-4 text-gray-400 text-sm">
+                  <div className="flex items-center gap-2">
+                    <img src={card.creatorImg} alt="creator" className="w-6 h-6 rounded-full" />
+                    <div>
+                      <p className="text-white">{card.creator}</p>
+                      <p className="text-xs">creator</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-white">{card.bid}</p>
+                    <p className="text-xs">Current Bit</p>
+                  </div>
+                </div>
+
+                <hr className="my-4 border-gray-700" />
+
+                {/* Actions */}
+                <div className="flex justify-between">
+                  <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                    Place Bid
+                  </button>
+                  <button className="text-white flex items-center gap-1 text-sm font-medium hover:text-indigo-400 transition">
+                    <Clock size={16} />
+                    View History
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default TodaysPicks;
