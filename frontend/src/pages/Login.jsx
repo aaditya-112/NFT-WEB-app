@@ -1,17 +1,32 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigateTo = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // handle login logic here
-    console.log("Logging in:", form);
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/user/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true, 
+        }
+      );
+      console.log(res.data);
+      toast.success(res.data.message);
+      navigateTo("/");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
   };
 
   return (
@@ -27,15 +42,15 @@ const Login = () => {
           <p className="text-gray-400 text-sm">Log in to your NFT account</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form className="space-y-4">
           <div>
             <label className="block text-sm text-gray-300 mb-1">Email</label>
             <input
               type="email"
               name="email"
               required
-              value={form.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
               className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-indigo-500"
             />
@@ -47,15 +62,15 @@ const Login = () => {
               type="password"
               name="password"
               required
-              value={form.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-indigo-500"
             />
           </div>
 
           <button
-            type="submit"
+            onClick={handleSubmit}
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-md transition"
           >
             Log In

@@ -1,21 +1,38 @@
+import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link , useNavigate} from "react-router-dom";
 
 const Signup = () => {
-  const [form, setForm] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigateTo= useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // handle signup logic here
-    console.log("Signing up:", form);
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/user/signup",
+        {
+          username,
+          email,
+          password,
+        },
+        {
+          withCerdential: true,
+        }
+      );
+      // console.log(res.data);
+      toast.success(res.data.message);
+      setEmail("");
+      setPassword("");
+      setUsername("");
+      navigateTo("/login");
+    } catch (error) {
+      // console.log(error.response.data.message);
+      toast.error(error.response.data.message);
+    }
   };
 
   return (
@@ -38,8 +55,8 @@ const Signup = () => {
               type="text"
               name="username"
               required
-              value={form.username}
-              onChange={handleChange}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Your username"
               className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-indigo-500"
             />
@@ -51,8 +68,8 @@ const Signup = () => {
               type="email"
               name="email"
               required
-              value={form.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
               className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-indigo-500"
             />
@@ -64,8 +81,8 @@ const Signup = () => {
               type="password"
               name="password"
               required
-              value={form.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-indigo-500"
             />

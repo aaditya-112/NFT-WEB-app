@@ -11,7 +11,7 @@ const Signup= async (req, res)=>{
         const user = await UserModel.findOne({email});
 
         if(user){
-            res.status(400).json({message:"email already exists"});
+            return res.status(400).json({message:"email already exists"});
         }
 
         const hassPassword = await bcrypt.hash(password,10);
@@ -26,7 +26,7 @@ const Signup= async (req, res)=>{
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({message:"internal server error", error});
+        res.status(500).json({message: `${error}`});
     }
 };
 

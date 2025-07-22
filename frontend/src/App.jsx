@@ -6,6 +6,7 @@ import {Route,  Routes} from 'react-router-dom'
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import AddNFT from "./pages/AddNFT"
+import {Toaster} from "react-hot-toast"
 function App() {
   
   return (
@@ -22,6 +23,8 @@ function App() {
       </Routes>
 
       <Footer/>
+      <Toaster/>
+      
     </>
   )
 }

@@ -33,7 +33,7 @@ const Navbar = () => {
             <Link to="/signup" className="hover:text-indigo-400 transition">Signin</Link>
           </li>
           <li>
-            <Link to="/create" className="hover:text-indigo-400 transition">Create Item</Link>
+            <Link to="/addnft" className="hover:text-indigo-400 transition">Create Item</Link>
           </li>
         </ul>
 
@@ -63,7 +63,7 @@ const Navbar = () => {
               <Link to="/signup" onClick={() => setIsOpen(false)} className="hover:text-indigo-400 transition">Signin</Link>
             </li>
             <li>
-              <Link to="/create" onClick={() => setIsOpen(false)} className="hover:text-indigo-400 transition">Create Item</Link>
+              <Link to="/addnft" onClick={() => setIsOpen(false)} className="hover:text-indigo-400 transition">Create Item</Link>
             </li>
           </ul>
         </div>

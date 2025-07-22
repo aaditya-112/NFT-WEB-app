@@ -1,32 +1,45 @@
+import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const AddNFT = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    price: "",
-    category: "",
-    image: null,
-  });
+  const [title, setTitle] = useState("");
+  const [description, setdescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [image, setImage] = useState(null);
 
-  const handleChange = (e) => {
-    if (e.target.name === "image") {
-      setFormData({ ...formData, image: e.target.files[0] });
-    } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+  const handleImage = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = async () => {
+      setImage(reader.result);
+    };
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle NFT form submission (e.g., API call)
-    const data = new FormData();
-    for (let key in formData) {
-      data.append(key, formData[key]);
+    try {
+      const res = await axios.post("http://localhost:5000/api/nft/aadnft", {
+        title,
+        description,
+        price,
+        image,
+      });
+      // console.log(res.data);
+      toast.success(res.data.message);
+      setTitle("");
+      setImage(null);
+      setdescription("");
+      setPrice("");
+    } catch (error) {
+      console.log(error.response);
+      toast.error(error.response.data.message);
     }
-
-    console.log("NFT Form Submitted", formData);
-    // You can send 'data' to your backend using axios
   };
 
   return (
@@ -44,8 +57,8 @@ const AddNFT = () => {
               type="text"
               name="title"
               placeholder="e.g. Abstract Artwork"
-              value={formData.title}
-              onChange={handleChange}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               required
               className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-indigo-500"
             />
@@ -58,32 +71,12 @@ const AddNFT = () => {
               name="description"
               rows="4"
               placeholder="e.g. This is an exclusive NFT..."
-              value={formData.description}
-              onChange={handleChange}
+              value={description}
+              onChange={(e) => setdescription(e.target.value)}
               required
               className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-indigo-500"
             ></textarea>
           </div>
-
-          {/* Category */}
-          <div>
-            <label className="block text-gray-300 mb-1">Category *</label>
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-indigo-500"
-            >
-              <option value="" disabled>Select a category</option>
-              <option value="Art">Art</option>
-              <option value="Music">Music</option>
-              <option value="Domain Names">Domain Names</option>
-              <option value="Virtual Worlds">Virtual Worlds</option>
-              <option value="Trading Cards">Trading Cards</option>
-            </select>
-          </div>
-
           {/* Price */}
           <div>
             <label className="block text-gray-300 mb-1">Price (ETH) *</label>
@@ -91,8 +84,8 @@ const AddNFT = () => {
               type="number"
               name="price"
               placeholder="e.g. 0.05"
-              value={formData.price}
-              onChange={handleChange}
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
               required
               step="0.01"
               className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-indigo-500"
@@ -106,7 +99,7 @@ const AddNFT = () => {
               type="file"
               name="image"
               accept="image/*"
-              onChange={handleChange}
+              onChange={handleImage}
               required
               className="w-full bg-transparent border border-gray-600 text-white file:bg-indigo-600 file:text-white file:px-4 file:py-2 file:rounded-md file:border-none file:cursor-pointer"
             />

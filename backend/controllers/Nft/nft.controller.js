@@ -5,16 +5,16 @@ const cloudinary = require("../../lib/cloudinary");
 const aadNft = async(req, res)=>{
     try {
         const result = await nftValidation.validateAsync(req.body);
-        const {title , discription , price, owner, image}= result;
+        const {title , description , price, owner, image}= result;
         
         if(!image){
-            return res.status(400).json({message:"imgae is required"})
+            return res.status(400).json({message:"image is required"});
         }
 
         const uploadResponse = await cloudinary.uploader.upload(image);
         const newNft= new nftModel({
             title,
-            discription,
+            description,
             price,
             owner,
             image: uploadResponse.secure_url,
@@ -29,4 +29,14 @@ const aadNft = async(req, res)=>{
    
 }
 
-module.exports={aadNft};
+
+const getAllNft= async(req, res)=>{
+    try {
+        const AllNft = await nftModel.find();
+        res.status(200).json({message:"got all nft", AllNft})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"error in getAllNft controller"})
+    }
+}
+module.exports={aadNft , getAllNft};
